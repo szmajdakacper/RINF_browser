@@ -1,38 +1,38 @@
-## RINF – Przeglądarka danych (Streamlit)
+## RINF – Data Viewer (Streamlit)
 
-Prosta aplikacja do przeglądania plików XML RINF (Rail Infrastructure Database).
+Note: The application UI and all labels are in Polish.
 
-### Wymagania
+### Requirements
 - Python 3.10+
 
-### Instalacja
+### Installation (Windows / PowerShell)
 ```bash
 python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### Uruchomienie
+### Run
 ```bash
 streamlit run app.py
 ```
 
-Po uruchomieniu otwórz przeglądarkę (adres pokaże się w terminalu). W lewym panelu wczytaj plik XML — możesz:
-- wskazać plik przez uploader,
-- albo podać ścieżkę (domyślnie ustawiona na plik z katalogu).
+Open the browser (URL appears in the terminal). In the left sidebar load an XML file — you can:
+- choose a file via the uploader, or
+- provide a path (defaults to the sample file in this folder).
 
-### Funkcje
-- Zakładka „Punkty eksploatacyjne”: lista punktów (posortowana po nazwie), szczegóły punktu (nazwa, kod PL, typ po polsku, współrzędne, lokalizacja liniowa, tory i perony z długościami i wysokościami).
-- Zakładka „Odcinki linii”: odcinki z nazwami punktów start/koniec (jeśli znane), długością [km] i zebranymi parametrami torów.
+### Features
+- Operational points tab: a list of points (sorted by name) with details such as name, PL code, point type (Polish label), coordinates, linear location, tracks and platforms (length and height).
+- Sections of line tab: line segments with start/end point names (if known), length [km], and selected track parameters.
 
-Wszystkie etykiety w interfejsie są po polsku.
+All UI labels in the app are in Polish.
 
-### Pliki
-- `app.py` – aplikacja Streamlit
-- `rinf_parser.py` – parser RINF XML (bezpieczny pamięciowo, iterparse)
-- `requirements.txt` – zależności
+### Files
+- `app.py` — Streamlit UI (Polish labels)
+- `rinf_parser.py` — RINF XML parser (memory-friendly, iterparse)
+- `requirements.txt` — dependencies
 
-### Uwagi
-- Parser korzysta z `xml.etree.ElementTree` i szuka tagów wg nazewnictwa widocznego w pliku (np. `OperationalPoint`, `OPName`, `UniqueOPID`, `OPTrackIdentification`, `OPTrackPlatformParameter`, `SectionOfLine`, `SOLOPStart`, `SOLOPEnd`, `SOLLength`).
-- Rozstaw toru jest mapowany z `ITP_NomGauge` na mm, jeśli `OptionalValue` jest dostępne; inaczej stosowana jest prosta mapa kod→mm.
+### Notes
+- The parser uses `xml.etree.ElementTree` and reads tags present in the XML (e.g., `OperationalPoint`, `OPName`, `UniqueOPID`, `OPTrackIdentification`, `OPTrackPlatformParameter`, `SectionOfLine`, `SOLOPStart`, `SOLOPEnd`, `SOLLength`).
+- Track gauge is derived from `ITP_NomGauge` to millimetres, using `OptionalValue` when available; otherwise a simple code→mm mapping is applied.
 
