@@ -1,0 +1,161 @@
+{
+  "OPType": {
+    "10": "stacja",
+    "20": "stacja drugorzedna",
+    "30": "stacja graniczna",
+    "40": "posterunek odgalezny",
+    "50": "stacja rozrzadowa",
+    "60": "techniczne stacje obslugi taboru",
+    "70": "przystanek pasazerski",
+    "80": "terminal towarowy",
+    "90": "punkt graniczny krajowej sieci",
+    "100": "punkt zmiany szerokosci toru",
+    "110": "punkt zmiany systemu zasilania",
+    "120": "punkt zmiany systemu kontroli",
+    "130": "punkt zmiany systemu lacznosci",
+    "140": "punkt graniczny zarzadcy infrastruktury",
+    "150": "punkt referencyjny / domena prywatna"
+  },
+  "ILL_Gauging": {
+    "10": "G1",
+    "20": "G2",
+    "30": "GA",
+    "40": "GB",
+    "50": "GC",
+    "60": "GBM",
+    "70": "GHE16",
+    "80": "GI2",
+    "90": "GI3",
+    "100": "OSZD-0-VM (RU)",
+    "110": "OSZD-0-1-VM (RU)",
+    "120": "OSZD-02-VM (RU)",
+    "130": "OSZD-1-VM (RU)",
+    "140": "OSZD-1-WM (RU)"
+  },
+  "IPP_LineCat": {
+    "10": "P1",
+    "20": "P2",
+    "30": "P3",
+    "40": "P4",
+    "50": "P5",
+    "60": "P6",
+    "70": "P1520",
+    "80": "P1600",
+    "90": "F1",
+    "100": "F2",
+    "110": "F3",
+    "120": "F4",
+    "130": "F1520",
+    "140": "F1600"
+  },
+  "ECS_VoltFreq": {
+    "AC15": "AC 15 kV 16.7 Hz",
+    "AC25": "AC 25 kV 50 Hz",
+    "DC30": "DC 3 kV",
+    "DC15": "DC 1.5 kV",
+    "DC0750": "DC 0.75 kV",
+    "DC06": "DC 0.6 kV",
+    "OTH": "Inny"
+  },
+  "ECS_SystemType": {
+    "10": "Sieć trakcyjna górna (OCL)",
+    "20": "Trzecia szyna",
+    "30": "Czwarta szyna",
+    "40": "Brak (linia niezelektryfikowana)"
+  },
+  "IPP_TENClass": {
+    "10": "Czesc TEN-T Comprehensive Network",
+    "20": "Czesc TEN-T Core Passenger Network",
+    "30": "Czesc TEN-T Core Freight Network",
+    "40": "Poza TEN-T"
+  },
+  "IPP_TempRange": {
+    "10": "T1 (-40..+35)",
+    "20": "T2 (-40..+45)",
+    "30": "T3 (-25..+45)"
+  },
+  "ITP_NomGauge": {
+    "10": "1000 mm",
+    "20": "1067 mm",
+    "30": "1435 mm",
+    "40": "1520 mm",
+    "50": "1524 mm",
+    "60": "1600 mm",
+    "70": "1668 mm",
+    "80": "Inny"
+  },
+  "ITP_RailInclination": {
+    "10": "1:20",
+    "20": "1:30",
+    "30": "1:32",
+    "40": "1:40",
+    "50": "Inna"
+  },
+  "ILR_EddyCurrentBrakes": {
+    "10": "Dozwolone",
+    "20": "Tylko hamowanie awaryjne",
+    "30": "Dozwolone warunkowo",
+    "40": "Warunkowo, tylko awaryjne",
+    "50": "Niedozwolone"
+  },
+  "ILR_MagneticBrakes": {
+    "10": "Dozwolone",
+    "20": "Tylko hamowanie awaryjne",
+    "30": "Dozwolone warunkowo",
+    "40": "Warunkowo, tylko awaryjne",
+    "50": "Niedozwolone"
+  },
+  "CTD_DetectionSystem": {
+    "10": "obwody torowe",
+    "20": "czujniki kol",
+    "30": "petle indukcyjne",
+    "40": "kombinowane"
+  },
+  "CPE_Level": {
+    "10": "Brak ETCS",
+    "20": "ETCS Level 1",
+    "30": "ETCS Level 2",
+    "40": "ETCS Level 3",
+    "50": "ETCS Level NTC"
+  },
+  "CPO_LegacyTrainProtection": {
+    "10": "ATB EG",
+    "20": "ATB NG",
+    "30": "ASFA",
+    "40": "EBICAB",
+    "43": "SHP (Polska)",
+    "50": "Krokodyl + RS",
+    "60": "Krokodyl + KVB",
+    "70": "Krokodyl + memor",
+    "80": "Indusi I60 + LZB",
+    "90": "Indusi I60",
+    "100": "BACC",
+    "110": "PZB 90",
+    "120": "ZUB 121",
+    "130": "ZUB 123",
+    "140": "GW-ATP",
+    "150": "INTEGRA-Signum",
+    "160": "MEMOR II+",
+    "170": "RSDD/SCMT",
+    "180": "TBL 1/2/3",
+    "190": "TPWS/AWS"
+  },
+  "CRS_Installed": {
+    "06": "Radiotelefon 150 MHz (Polska)",
+    "10": "Brak lacznosci radiowej",
+    "100": "UIC 751-3 VHF",
+    "200": "VZG (DE)",
+    "300": "TRS (CZ/SK)",
+    "400": "MA - kanal informacyjny (UK)"
+  },
+  "SOLNature": {
+    "10": "Regular SoL",
+    "20": "Linia wewnetrzna OP",
+    "30": "Linia laczaca"
+  },
+  "SOLTrackDirection": {
+    "10": "Kierunek nieparzysty (zasadniczy)",
+    "20": "Kierunek parzysty (przeciwny)",
+    "30": "Oba kierunki"
+  }
+}
