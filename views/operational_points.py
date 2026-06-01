@@ -90,20 +90,38 @@ def render():
     with tab_tracks:
         if not op.tracks:
             st.info("Brak torow operacyjnych.")
-        for i, t in enumerate(op.tracks):
-            with st.expander(f"Tor {t.identification} (IM {t.im_code})  -  {len(t.parameters)} parametrow, {len(t.platforms)} peronow, {len(t.tunnels)} tuneli", expanded=(i == 0)):
-                st.caption(f"Waznosc: {t.validity_start} → {t.validity_end}")
-                render_params_table(t.parameters, key=f"op_track_{i}_params")
-                if t.platforms:
-                    st.markdown("**Perony:**")
-                    for j, pl in enumerate(t.platforms):
-                        with st.expander(f"Peron {pl.identification} ({len(pl.parameters)} parametrow)"):
-                            render_params_table(pl.parameters, key=f"op_track_{i}_plat_{j}")
-                if t.tunnels:
-                    st.markdown("**Tunele:**")
-                    for j, tu in enumerate(t.tunnels):
-                        with st.expander(f"Tunel {tu.identification}"):
-                            render_params_table(tu.parameters, key=f"op_track_{i}_tun_{j}")
+        # Wybierz tor (zamiast zagniezdzonych expanderow)
+        track_labels = [
+            f"Tor {t.identification}  -  {len(t.parameters)} par., {len(t.platforms)} peronow, {len(t.tunnels)} tuneli"
+            for t in op.tracks
+        ]
+        if op.tracks:
+            idx_t = st.selectbox("Wybierz tor:", list(range(len(op.tracks))), format_func=lambda i: track_labels[i], key="op_track_sel")
+            t = op.tracks[idx_t]
+            st.caption(f"IM: {t.im_code}  |  Identyfikator: {t.identification}  |  Waznosc: {t.validity_start} → {t.validity_end}")
+            sub_tabs = st.tabs([
+                "Parametry toru",
+                f"Perony ({len(t.platforms)})",
+                f"Tunele ({len(t.tunnels)})",
+            ])
+            with sub_tabs[0]:
+                render_params_table(t.parameters, key=f"op_track_{idx_t}_params")
+            with sub_tabs[1]:
+                if not t.platforms:
+                    st.info("Brak peronow.")
+                for j, pl in enumerate(t.platforms):
+                    st.markdown(f"#### Peron {pl.identification}  (IM {pl.im_code})")
+                    st.caption(f"Waznosc: {pl.validity_start} → {pl.validity_end}  |  Parametrow: {len(pl.parameters)}")
+                    render_params_table(pl.parameters, key=f"op_track_{idx_t}_plat_{j}")
+                    st.divider()
+            with sub_tabs[2]:
+                if not t.tunnels:
+                    st.info("Brak tuneli.")
+                for j, tu in enumerate(t.tunnels):
+                    st.markdown(f"#### Tunel {tu.identification}  (IM {tu.im_code})")
+                    st.caption(f"Waznosc: {tu.validity_start} → {tu.validity_end}  |  Parametrow: {len(tu.parameters)}")
+                    render_params_table(tu.parameters, key=f"op_track_{idx_t}_tun_{j}")
+                    st.divider()
 
     with tab_sidings:
         if not op.sidings:
