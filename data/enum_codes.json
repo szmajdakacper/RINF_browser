@@ -1,19 +1,19 @@
 {
   "OPType": {
     "10": "stacja",
-    "20": "stacja drugorzedna",
+    "20": "stacja drugorzędna",
     "30": "stacja graniczna",
-    "40": "posterunek odgalezny",
-    "50": "stacja rozrzadowa",
-    "60": "techniczne stacje obslugi taboru",
-    "70": "przystanek pasazerski",
+    "40": "posterunek odgałęźny",
+    "50": "stacja rozrządowa",
+    "60": "techniczne stacje obsługi taboru",
+    "70": "przystanek pasażerski",
     "80": "terminal towarowy",
     "90": "punkt graniczny krajowej sieci",
-    "100": "punkt zmiany szerokosci toru",
+    "100": "punkt zmiany szerokości toru",
     "110": "punkt zmiany systemu zasilania",
     "120": "punkt zmiany systemu kontroli",
-    "130": "punkt zmiany systemu lacznosci",
-    "140": "punkt graniczny zarzadcy infrastruktury",
+    "130": "punkt zmiany systemu łączności",
+    "140": "punkt graniczny zarządcy infrastruktury",
     "150": "punkt referencyjny / domena prywatna"
   },
   "ILL_Gauging": {
@@ -49,12 +49,12 @@
     "140": "F1600"
   },
   "ECS_VoltFreq": {
-    "AC15": "AC 15 kV 16.7 Hz",
+    "AC15": "AC 15 kV 16,7 Hz",
     "AC25": "AC 25 kV 50 Hz",
     "DC30": "DC 3 kV",
-    "DC15": "DC 1.5 kV",
-    "DC0750": "DC 0.75 kV",
-    "DC06": "DC 0.6 kV",
+    "DC15": "DC 1,5 kV",
+    "DC0750": "DC 0,75 kV",
+    "DC06": "DC 0,6 kV",
     "OTH": "Inny"
   },
   "ECS_SystemType": {
@@ -64,9 +64,9 @@
     "40": "Brak (linia niezelektryfikowana)"
   },
   "IPP_TENClass": {
-    "10": "Czesc TEN-T Comprehensive Network",
-    "20": "Czesc TEN-T Core Passenger Network",
-    "30": "Czesc TEN-T Core Freight Network",
+    "10": "Część TEN-T Comprehensive Network",
+    "20": "Część TEN-T Core Passenger Network",
+    "30": "Część TEN-T Core Freight Network",
     "40": "Poza TEN-T"
   },
   "IPP_TempRange": {
@@ -107,8 +107,8 @@
   },
   "CTD_DetectionSystem": {
     "10": "obwody torowe",
-    "20": "czujniki kol",
-    "30": "petle indukcyjne",
+    "20": "czujniki kół",
+    "30": "pętle indukcyjne",
     "40": "kombinowane"
   },
   "CPE_Level": {
@@ -142,16 +142,16 @@
   },
   "CRS_Installed": {
     "06": "Radiotelefon 150 MHz (Polska)",
-    "10": "Brak lacznosci radiowej",
+    "10": "Brak łączności radiowej",
     "100": "UIC 751-3 VHF",
     "200": "VZG (DE)",
     "300": "TRS (CZ/SK)",
-    "400": "MA - kanal informacyjny (UK)"
+    "400": "MA — kanał informacyjny (UK)"
   },
   "SOLNature": {
-    "10": "Regular SoL",
-    "20": "Linia wewnetrzna OP",
-    "30": "Linia laczaca"
+    "10": "Zwykły odcinek linii",
+    "20": "Linia wewnętrzna OP",
+    "30": "Linia łącząca"
   },
   "SOLTrackDirection": {
     "10": "Kierunek nieparzysty (zasadniczy)",
