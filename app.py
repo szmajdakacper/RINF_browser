@@ -2,6 +2,7 @@
 from __future__ import annotations
 import streamlit as st
 
+from rinf import FOOTER_TEXT
 from views import home, operational_points, sections, parameter_browser, raw_xpath, line_compatibility
 
 
@@ -112,6 +113,18 @@ def main():
         st.sidebar.info("Wczytaj plik w widoku 'Plik / Statystyki'.")
 
     VIEWS[choice]()
+
+    # Stopka
+    st.markdown(
+        f"""
+        <div style="text-align:center; color:#888; font-size:0.85em;
+                    padding:20px 10px 10px; margin-top:40px;
+                    border-top:1px solid #eee;">
+            {FOOTER_TEXT}
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 if __name__ == "__main__":

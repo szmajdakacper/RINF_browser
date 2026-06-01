@@ -12,6 +12,7 @@ from typing import Iterable
 
 import openpyxl
 
+from .. import FOOTER_TEXT
 from ..models import RINFDataset, SectionOfLine, OperationalPoint, Parameter
 from ..formatters import merge_param_values
 
@@ -233,7 +234,7 @@ def build_route_form(
             "tor_label": f"Tor: {label} ({tid})",
             "zarzadca": "PKP PLK S.A.",
             "linia": f"{line_num}   |   Tor {label} ({tid})",
-            "opracowal": "RINF Browser",
+            "opracowal": FOOTER_TEXT,
         }
         data = fill_workbook(template_path, tid, per_track[tid], header)
         fname = f"Formularz zgodnosci - linia {line_num} {route_label} - tor {label} ({tid}).xlsx"
