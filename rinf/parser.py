@@ -147,6 +147,7 @@ def _build_op(elem) -> OperationalPoint:
         unique_id=uid,
         taf_tap=taf,
         op_type_code=code,
+        op_type_optional=optional,
         op_type_label=op_type_label_pl(code, optional),
         geographic=_build_geo(elem.find("OPGeographicLocation")),
         railway_location=_build_railway_loc(elem.find("OPRailwayLocation")),

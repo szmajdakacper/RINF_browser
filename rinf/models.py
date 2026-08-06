@@ -119,6 +119,7 @@ class OperationalPoint:
     unique_id: str = ""                        # "PL04430"
     taf_tap: Optional[str] = None              # OPTafTapCode
     op_type_code: str = ""                     # "70"
+    op_type_optional: Optional[str] = None     # surowe OPType@OptionalValue, np. "passenger stop"
     op_type_label: str = ""                    # "passenger stop" / "przystanek pasazerski"
     geographic: Optional[GeoPoint] = None
     railway_location: Optional[RailwayLocation] = None
