@@ -173,6 +173,8 @@ class RINFDataset:
     # Metadane
     source_path: str = ""
     source_hash: str = ""
+    source_format: str = "XML"                 # "XML" (stary RINF) / "RDF" (N-Triples ERA)
+    data_date: Optional[date] = None           # RDF: data eksportu z nazwy pliku (brak dat waznosci)
 
     def build_indexes(self) -> None:
         self.op_by_id = {op.unique_id: op for op in self.operational_points}

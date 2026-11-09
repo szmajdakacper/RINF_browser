@@ -95,6 +95,34 @@ RINF_app/
 | SOLTunnel | 33 | wszystkie 8 parametrów |
 | LocationPoint | 12 089 | tak |
 
+## Formaty danych wejściowych
+
+Aplikacja przyjmuje dwa formaty; rozpoznaje je automatycznie (`rinf/parser.py: parse_rinf`):
+
+| Format | Przykład | Parser |
+|---|---|---|
+| RINF XML (dotychczasowy) | `RINF-PL_2026_3_12d_rinf (1).xml` | `rinf/parser.py` |
+| RDF N-Triples, ontologia ERA | `PLK_RINF_20260903_002 (1).nt` | `rinf/parser_nt.py` |
+
+Importer RDF buduje te same obiekty co parser XML i tłumaczy właściwości ERA na
+dotychczasowe ID parametrów (np. `era:maximumPermittedSpeed` → `IPP_MaxSpeed`),
+więc widoki, mapa i formularz zgodności działają bez zmian. Różnice:
+
+- **brak danych** — parametry z XML, których plik RDF nie zawiera
+  (m.in. `IPP_LoadCap`, `EPA_TSIHeads`, `EPA_NumRaisedSpeed`, `ECS_RegenerativeBraking`,
+  `ILR_MaxDeceleration`, `CRG_Version`, `IPP_TENClass`, większość `CTD_*`, długość bocznic,
+  `IPL_AreaBoardingAid`). W trybie technicznym kolumna *Set* = „brak w pliku RDF”.
+- **nowe parametry** dostępne tylko w RDF mają ID `ERA:<nazwa>` (np. wartości krajowe ETCS,
+  `ERA:tentNetworkLevel`, `ERA:typeOfTraffic`).
+- brak dat ważności (pokazywana jest data eksportu z nazwy pliku), brak punktów
+  `LocationPoint` (lokalne zmiany prędkości) i współrzędnych początku/końca tuneli.
+- poziom ETCS na torach bez ETCS = *n/d* (w XML kod `10`).
+- etykiety kodów (np. `267` → `ESC-PL-06-L2`) pochodzą z `data/nt_optional_values.json`
+  (wyciągnięte ze starego XML); część list kodów ERA się zmieniła (np. GSM-R głos `190`).
+
+Plik `.nt` (~240 MB) najlepiej wczytać przez ścieżkę; limit uploadu podniesiono
+w `.streamlit/config.toml`. Parsowanie: ~8 s, ~450 MB RAM.
+
 ## Plik źródłowy
 
 Aplikacja testowana z plikiem `RINF-PL_2026_3_12d_rinf (1).xml` (~100 MB, 9195 OP+SOL, 837k parametrów).

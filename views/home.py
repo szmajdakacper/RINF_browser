@@ -1,5 +1,6 @@
 """Widok startowy: upload pliku + statystyki ogólne."""
 from __future__ import annotations
+import re
 from pathlib import Path
 import streamlit as st
 import pandas as pd
@@ -8,12 +9,33 @@ from rinf.parser import parse_rinf
 
 
 @st.cache_resource(show_spinner="Parsowanie pliku RINF...")
-def load_dataset_cached(source_bytes: bytes | None, source_path: str | None):
+def load_dataset_cached(source_bytes: bytes | None, source_path: str | None, source_name: str | None = None):
     if source_bytes is not None:
-        return parse_rinf(source_bytes)
+        return parse_rinf(source_bytes, name=source_name)
     if source_path:
         return parse_rinf(source_path)
     return None
+
+
+_DATE_IN_NAME_RE = re.compile(r"(20\d{2})_?(\d{1,2})_?(\d{1,2})")
+
+
+def _find_rinf_files(app_dir: Path, suffix: str) -> list[Path]:
+    """Pliki z 'rinf' w nazwie (bez względu na wielkość liter) w app_dir i katalogu nadrzędnym."""
+    found = []
+    for d in (app_dir, app_dir.parent):
+        found += [p for p in d.iterdir()
+                  if p.is_file() and p.suffix.lower() == suffix and "rinf" in p.name.lower()]
+    return found
+
+
+def _newest_first(paths: list[Path]) -> list[Path]:
+    """Sortuje wg daty w nazwie pliku (np. 20260903, 2026_3_12), potem wg daty modyfikacji."""
+    def key(p: Path):
+        m = _DATE_IN_NAME_RE.search(p.name)
+        named = (int(m.group(1)), int(m.group(2)), int(m.group(3))) if m else (0, 0, 0)
+        return (named, p.stat().st_mtime)
+    return sorted(paths, key=key, reverse=True)
 
 
 def _detect_validity_range(ds):
@@ -45,14 +67,18 @@ punkty eksploatacyjne, odcinki linii, tory, perony, tunele, bocznice oraz
 parametry techniczne (ETCS, GSM-R, hamowanie, elektryfikacja, …).
 """)
 
-    # Wyszukaj domyślny plik XML w katalogu aplikacji
+    # Domyślny plik z katalogu aplikacji i katalogu nadrzędnego:
+    # najnowszy eksport RDF (.nt), a jeśli go nie ma - najnowszy XML
     app_dir = Path(__file__).resolve().parent.parent
-    candidates = sorted(app_dir.glob("*rinf*.xml")) + sorted(app_dir.glob("RINF*.xml"))
+    candidates = _newest_first(_find_rinf_files(app_dir, ".nt")) or _newest_first(_find_rinf_files(app_dir, ".xml"))
     default = str(candidates[0]) if candidates else ""
 
     col1, col2 = st.columns([2, 1])
     with col1:
-        upload = st.file_uploader("Wybierz plik XML RINF", type=["xml"])
+        upload = st.file_uploader(
+            "Wybierz plik RINF (XML lub RDF N-Triples .nt)", type=["xml", "nt"],
+            help="Duże pliki (np. .nt ~240 MB) wygodniej wczytać przez ścieżkę obok.",
+        )
     with col2:
         default_path = st.text_input(
             "lub ścieżka do pliku",
@@ -63,7 +89,7 @@ parametry techniczne (ETCS, GSM-R, hamowanie, elektryfikacja, …).
     if c1.button("Wczytaj", type="primary", use_container_width=True):
         try:
             if upload is not None:
-                ds = load_dataset_cached(upload.getvalue(), None)
+                ds = load_dataset_cached(upload.getvalue(), None, upload.name)
             elif default_path:
                 ds = load_dataset_cached(None, default_path)
                 st.session_state["rinf_path"] = default_path
@@ -88,7 +114,19 @@ parametry techniczne (ETCS, GSM-R, hamowanie, elektryfikacja, …).
 
     # Banner walidacji
     vstart, vend = _detect_validity_range(ds)
-    if vstart:
+    if ds.source_format == "RDF":
+        st.success(
+            "🔗 **Źródło: RDF / N-Triples (ontologia ERA)**"
+            + (f"   |   Data eksportu (z nazwy pliku): **{ds.data_date.isoformat()}**" if ds.data_date else "")
+        )
+        st.info(
+            "Plik RDF nie zawiera dat ważności ani części parametrów ze starego XML "
+            "(np. pojemność ładunkowa, ślizgacze TSI, hamowanie odzyskowe, maks. opóźnienie, "
+            "szczegóły detekcji pociągu, długość bocznic). Takie parametry są oznaczone jako "
+            "**brak danych** (w trybie technicznym kolumna *Set*: „brak w pliku RDF”). "
+            "Parametry dostępne tylko w RDF mają ID z prefiksem `ERA:`."
+        )
+    elif vstart:
         st.success(
             f"📅 **Data ważności danych:** od {vstart.isoformat()}"
             + (f" do {vend.isoformat()}" if vend and vend.year < 3000 else "")

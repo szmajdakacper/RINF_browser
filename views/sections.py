@@ -165,8 +165,8 @@ def render():
         c1.markdown(f"**Zarządca (IM):** {sol.im_code}")
         c2.markdown(f"**Natura odcinka:** {sol.nature_label} (kod {sol.nature_code})")
         c2.markdown(f"**Długość:** {sol.length_km} km")
-        c3.markdown(f"**Ważność od:** {sol.validity_start}")
-        c3.markdown(f"**Ważność do:** {sol.validity_end}")
+        c3.markdown(f"**Ważność od:** {sol.validity_start or '—'}")
+        c3.markdown(f"**Ważność do:** {sol.validity_end or '—'}")
 
     if not sol.tracks:
         st.info("Brak torów na tym odcinku.")

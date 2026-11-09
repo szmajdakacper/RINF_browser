@@ -160,7 +160,7 @@ def render():
             if op.railway_location:
                 st.markdown(f"**Linia (NationalIdentNum):** `{op.railway_location.national_ident_num}`")
                 st.markdown(f"**Kilometraż:** {op.railway_location.kilometer}")
-            st.markdown(f"**Ważność od:** {op.validity_start}")
+            st.markdown(f"**Ważność od:** {op.validity_start or '—'}")
             if op.validity_end and op.validity_end.year < 3000:
                 st.markdown(f"**Ważność do:** {op.validity_end}")
         with col2:
@@ -179,7 +179,7 @@ def render():
             ]
             idx_t = st.selectbox("Wybierz tor:", list(range(len(op.tracks))), format_func=lambda i: track_labels[i], key="op_track_sel")
             t = op.tracks[idx_t]
-            st.caption(f"IM: {t.im_code}  |  Identyfikator: {t.identification}  |  Ważność: {t.validity_start} → {t.validity_end}")
+            st.caption(f"IM: {t.im_code}  |  Identyfikator: {t.identification}  |  Ważność: {t.validity_start or '—'} → {t.validity_end or '—'}")
 
             sub_tabs = st.tabs([
                 "Parametry toru",
@@ -193,7 +193,7 @@ def render():
                     st.info("Brak peronów.")
                 for j, pl in enumerate(t.platforms):
                     st.markdown(f"#### Peron {pl.identification}  (IM {pl.im_code})")
-                    st.caption(f"Ważność: {pl.validity_start} → {pl.validity_end}  |  Parametrów: {len(pl.parameters)}")
+                    st.caption(f"Ważność: {pl.validity_start or '—'} → {pl.validity_end or '—'}  |  Parametrów: {len(pl.parameters)}")
                     render_params_table(pl.parameters, key=f"op_track_{idx_t}_plat_{j}")
                     st.divider()
             with sub_tabs[2]:
@@ -201,7 +201,7 @@ def render():
                     st.info("Brak tuneli.")
                 for j, tu in enumerate(t.tunnels):
                     st.markdown(f"#### Tunel {tu.identification}  (IM {tu.im_code})")
-                    st.caption(f"Ważność: {tu.validity_start} → {tu.validity_end}  |  Parametrów: {len(tu.parameters)}")
+                    st.caption(f"Ważność: {tu.validity_start or '—'} → {tu.validity_end or '—'}  |  Parametrów: {len(tu.parameters)}")
                     render_params_table(tu.parameters, key=f"op_track_{idx_t}_tun_{j}")
                     st.divider()
 
@@ -215,7 +215,7 @@ def render():
             ]
             idx_s = st.selectbox("Wybierz bocznicę:", list(range(len(op.sidings))), format_func=lambda i: siding_labels[i], key="op_siding_sel")
             s = op.sidings[idx_s]
-            st.caption(f"IM: {s.im_code}  |  Ważność: {s.validity_start} → {s.validity_end}")
+            st.caption(f"IM: {s.im_code}  |  Ważność: {s.validity_start or '—'} → {s.validity_end or '—'}")
             render_params_table(s.parameters, key=f"op_siding_{idx_s}")
 
     with tab_sols:

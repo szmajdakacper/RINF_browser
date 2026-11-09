@@ -20,7 +20,7 @@ VIEWS = {
     "🛤️ Odcinki linii":         sections.render,
     "📚 Parametry RINF":        parameter_browser.render,
     "📄 Formularz zgodności":   line_compatibility.render,
-    "🔧 Surowy XML":            raw_xpath.render,
+    "🔧 Surowe dane":          raw_xpath.render,
 }
 
 

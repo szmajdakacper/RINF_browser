@@ -1,0 +1,3 @@
+[server]
+# Plik RINF w formacie RDF (.nt) ma ~240 MB - domyslny limit uploadu to 200 MB
+maxUploadSize = 1024

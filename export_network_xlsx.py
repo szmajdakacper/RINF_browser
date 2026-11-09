@@ -109,32 +109,34 @@ def build_rows(ds):
 
     # Odcinki: regula 3 (dlugosc > 0), regula 2 (oba punkty znane),
     # regula 4 (dedup pary punktow w obu kierunkach + nr linii)
-    best_sol: dict[tuple, object] = {}
+    # best_sol: klucz -> (sol, dlugosc_m)
+    best_sol: dict[tuple, tuple] = {}
     for sol in ds.sections_of_line:
-        if not sol.length_km or sol.length_km <= 0:
+        # Regula 3 sprawdzana na wartosci zapisywanej do pliku (po zaokragleniu do m)
+        dlugosc_m = round(sol.length_km * 1000) if sol.length_km else 0
+        if dlugosc_m <= 0:
             stats["sol_bez_dlugosci"] += 1
             continue
         if sol.op_start_id not in known_ids or sol.op_end_id not in known_ids:
             stats["sol_brakujacy_punkt"] += 1
             continue
-        nr = sol.line_number_pl or _line_number(sol.line_id)
-        key = (frozenset((sol.op_start_id, sol.op_end_id)), nr)
+        key = (frozenset((sol.op_start_id, sol.op_end_id)), sol.line_number_pl)
         prev = best_sol.get(key)
         if prev is None:
-            best_sol[key] = sol
+            best_sol[key] = (sol, dlugosc_m)
         else:
             stats["sol_duplikaty"] += 1
-            if _validity_key(sol) > _validity_key(prev):
-                best_sol[key] = sol
+            if _validity_key(sol) > _validity_key(prev[0]):
+                best_sol[key] = (sol, dlugosc_m)
 
     odcinki = []
-    for sol in sorted(best_sol.values(),
-                      key=lambda s: (s.line_number_pl, s.op_start_id, s.op_end_id)):
+    for sol, dlugosc_m in sorted(best_sol.values(),
+                                 key=lambda v: (v[0].line_number_pl, v[0].op_start_id, v[0].op_end_id)):
         odcinki.append([
             sol.op_start_id,
             sol.op_end_id,
-            round(sol.length_km * 1000),
-            sol.line_number_pl or _line_number(sol.line_id),
+            dlugosc_m,
+            sol.line_number_pl,
             ZARZADCA,
             ZRODLO,
         ])
@@ -237,7 +239,7 @@ def main(argv: list[str]) -> int:
     print("Pominieto:")
     print(f"  punkty bez wspolrzednych:       {stats['op_bez_wspolrzednych']}")
     print(f"  duplikaty punktow (kod):        {stats['op_duplikaty']}")
-    print(f"  odcinki bez dlugosci (<=0):     {stats['sol_bez_dlugosci']}")
+    print(f"  odcinki bez dlugosci (<=0 m):   {stats['sol_bez_dlugosci']}")
     print(f"  odcinki z pominietym punktem:   {stats['sol_brakujacy_punkt']}")
     print(f"  duplikaty odcinkow (para+linia): {stats['sol_duplikaty']}")
 

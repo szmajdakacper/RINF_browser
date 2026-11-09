@@ -222,11 +222,59 @@ def _fast_iter(context):
             del elem.getparent()[0]
 
 
-def parse_rinf(source: Union[str, Path, bytes, IO]) -> RINFDataset:
-    """Wczytuje plik RINF i zwraca pelny dataset z indeksami.
+def _peek_io(source) -> bytes:
+    """Pierwsze bajty obiektu plikowego bez przesuwania pozycji odczytu."""
+    if hasattr(source, "peek"):
+        head = source.peek(512)[:512]
+    elif source.seekable():
+        pos = source.tell()
+        head = source.read(512)
+        source.seek(pos)
+    else:
+        return b""
+    return head.encode("utf-8") if isinstance(head, str) else bytes(head)
+
+
+def detect_format(source: Union[str, Path, bytes, IO], name: str | None = None) -> str:
+    """Rozpoznaje format pliku RINF: "XML" (stary RINF) albo "RDF" (N-Triples ERA)."""
+    if isinstance(source, (bytes, bytearray)):
+        head = bytes(source[:512])
+    elif isinstance(source, (str, Path)):
+        with open(source, "rb") as f:
+            head = f.read(512)
+    else:
+        head = _peek_io(source)
+    head = head.lstrip(b"\xef\xbb\xbf \t\r\n")
+    if head.startswith((b"<?xml", b"<RINFData")):
+        return "XML"
+    if head.startswith((b"<http", b"_:", b"#")):
+        return "RDF"
+    ref = str(source) if isinstance(source, (str, Path)) else (name or "")
+    return "RDF" if ref.lower().endswith(".nt") else "XML"
+
+
+def parse_rinf(source: Union[str, Path, bytes, IO], name: str | None = None) -> RINFDataset:
+    """Wczytuje plik RINF (XML lub N-Triples) i zwraca pelny dataset z indeksami.
 
     source: sciezka, bajty lub plikopodobny obiekt.
+    name:   opcjonalna nazwa pliku (np. z uploadu) - pomaga rozpoznac format
+            i date eksportu pliku RDF.
     """
+    if not isinstance(source, (str, Path, bytes, bytearray)):
+        # Obiekt plikowy: nazwa z atrybutu .name, a jesli nie da sie
+        # podejrzec poczatku bez konsumowania strumienia - wczytujemy do pamieci
+        name = name or getattr(source, "name", None)
+        if not (hasattr(source, "peek") or source.seekable()):
+            data = source.read()
+            source = data.encode("utf-8") if isinstance(data, str) else data
+    if detect_format(source, name) == "RDF":
+        from .parser_nt import parse_rinf_nt
+        return parse_rinf_nt(source, name=name)
+    return _parse_rinf_xml(source)
+
+
+def _parse_rinf_xml(source: Union[str, Path, bytes, IO]) -> RINFDataset:
+    """Parser dotychczasowego formatu RINF XML."""
     ds = RINFDataset()
     if isinstance(source, (str, Path)):
         source_path = str(source)

@@ -1,0 +1,56 @@
+{
+  "CPE_SystemCompatibility": {
+    "239": "ESC-PL-01-L1",
+    "240": "ESC-PL-02-L1LS",
+    "242": "ESC-PL-04-L2",
+    "266": "ESC-PL-05-L2",
+    "267": "ESC-PL-06-L2"
+  },
+  "CTD_DetectionSystem": {
+    "10": "track circuit",
+    "20": "wheel detector",
+    "30": "loop"
+  },
+  "ECS_SystemType": {
+    "10": "Overhead contact line (OCL)",
+    "40": "Not electrified"
+  },
+  "IPL_TENClass": {
+    "10": "Part of the TEN-T Comprehensive Network",
+    "20": "Part of the TEN-T Core Freight Network",
+    "30": "Part of the TEN-T Core Passenger Network"
+  },
+  "IPP_LineCat": {
+    "50": "P5",
+    "110": "F3"
+  },
+  "IPP_TENClass": {
+    "10": "Part of the TEN-T Comprehensive Network",
+    "20": "Part of the TEN-T Core Freight Network",
+    "30": "Part of the TEN-T Core Passenger Network",
+    "40": "Off-TEN"
+  },
+  "IPP_TempRange": {
+    "10": "T1 (-25 to +40)",
+    "20": "T2 (-40 to +35)",
+    "30": "T3 (-25 to +45)"
+  },
+  "ITP_NomGauge": {
+    "30": "1435",
+    "40": "1520"
+  },
+  "OPType": {
+    "10": "station",
+    "20": "small station",
+    "30": "passenger terminal",
+    "40": "freight terminal",
+    "60": "train technical services",
+    "70": "passenger stop",
+    "80": "junction",
+    "90": "border point",
+    "110": "technical change",
+    "120": "switch",
+    "130": "private siding",
+    "140": "domestic border point"
+  }
+}
