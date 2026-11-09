@@ -195,7 +195,8 @@ def _build_sol(elem) -> SectionOfLine:
         line_num_pl = m.group(2).lstrip("0") or "0"
     nat_el = elem.find("SOLNature")
     nat_code = nat_el.get("Value") if nat_el is not None else ""
-    nat_label = (nat_el.get("OptionalValue") if nat_el is not None else None) or decode_enum("SOLNature", nat_code) or nat_code
+    # Polski opis ze slownika (jak w imporcie RDF), w razie braku - OptionalValue z XML
+    nat_label = decode_enum("SOLNature", nat_code) or (nat_el.get("OptionalValue") if nat_el is not None else None) or nat_code
     sol = SectionOfLine(
         im_code=(elem.find("SOLIMCode").get("Value") if elem.find("SOLIMCode") is not None else ""),
         line_id=line_id,

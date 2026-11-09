@@ -120,6 +120,13 @@ więc widoki, mapa i formularz zgodności działają bez zmian. Różnice:
 - etykiety kodów (np. `267` → `ESC-PL-06-L2`) pochodzą z `data/nt_optional_values.json`
   (wyciągnięte ze starego XML); część list kodów ERA się zmieniła (np. GSM-R głos `190`).
 
+**Opisy kodów** (np. `60` → „węgiel z dodatkami”, `40` → „760 mm”) pochodzą z
+`data/enum_codes.json` — słowników SKOS ERA (`…/concepts/<schemat>/rinf/<kod>`),
+zweryfikowanych z etykietami w pliku XML PLK. Kody bez pewnego znaczenia (np. w RDF:
+łączność radiowa `CRS_Installed=10`, GSM-R głos `190`) są pokazywane bez opisu.
+W formularzu zgodności wiersz „Stosowanie smarowania obrzeży kół” pokazuje
+„dozwolone” / „zabronione” (parametr RINF pyta o zakaz).
+
 Plik `.nt` (~240 MB) najlepiej wczytać przez ścieżkę; limit uploadu podniesiono
 w `.streamlit/config.toml`. Parsowanie: ~8 s, ~450 MB RAM.
 

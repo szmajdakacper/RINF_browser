@@ -36,6 +36,7 @@ class Parameter:
     group_pl: str = ""
     unit: Optional[str] = None
     description: str = ""
+    code_label: Optional[str] = None           # opis kodu (enum_codes.json), np. "60" -> "węgiel z dodatkami"
 
     @property
     def display(self) -> str:
@@ -46,7 +47,8 @@ class Parameter:
           IsApplicable=NYA          -> "brak danych"
           IsApplicable=Y Value=Y    -> "TAK"
           IsApplicable=Y Value=N    -> "NIE"
-          IsApplicable=Y Value=X    -> "X" lub "X (OptionalValue)"
+          IsApplicable=Y Value=X    -> "X (opis kodu)" gdy kod ma opis w enum_codes.json,
+                                       w przeciwnym razie "X" / "X (OptionalValue)"
         """
         if self.is_applicable == "N":
             return "n/d"
@@ -60,6 +62,9 @@ class Parameter:
             return "NIE"
         if v is None and ov is None:
             return self.is_applicable or ""
+        if self.code_label and self.code_label != v:
+            # Kod slownikowy - opis zastepuje jednostke (np. IPL_Height "40" = 760 mm)
+            return f"{v} ({self.code_label})"
         if ov and ov != v:
             return f"{v} ({ov})"
         text = v or ""

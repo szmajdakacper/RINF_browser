@@ -33,13 +33,15 @@ def enrich_param(param) -> None:
     param.group_pl = info.get("group_pl") or "Inne"
     param.unit = info.get("unit")
     param.description = info.get("description") or ""
+    param.code_label = decode_enum(param.id, param.value)
 
 
 def decode_enum(param_id: str, code: str | None) -> str | None:
     """Zwraca opisowa wartosc dla kodu, jezeli mapowanie istnieje."""
     if not code:
         return None
-    return enum_codes().get(param_id, {}).get(code)
+    codes = enum_codes().get(param_id)
+    return codes.get(code) if isinstance(codes, dict) else None
 
 
 def op_type_label_pl(code: str | None, optional_value: str | None = None) -> str:

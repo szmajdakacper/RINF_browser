@@ -76,6 +76,28 @@ PARAM_MAP: dict[tuple[str, str], list[str]] = {
 }
 
 
+# Wartosci tlumaczone w formularzu, bo nazwa wiersza pyta o cos innego niz
+# parametr RINF. Np. wiersz "Stosowanie smarowania obrzezy kol" jest zasilany
+# parametrem "Smarowanie obrzezy ZABRONIONE" - "NIE" oznacza wiec "dozwolone".
+# Wartosc None = pomijamy (nie wnosi informacji do wiersza).
+FORM_VALUE_MAP: dict[str, dict[str, str | None]] = {
+    "IHS_FlangeLubeForbidden": {"TAK": "zabronione", "NIE": "dozwolone"},
+    "CTD_FlangeLubeRules": {
+        "TAK": "obowiązują zasady smarowania (wymóg systemu detekcji pociągu)",
+        "NIE": None,
+    },
+}
+
+
+def _form_value(p: Parameter) -> str | None:
+    """Wartosc parametru w postaci wpisywanej do formularza."""
+    disp = p.display
+    mapping = FORM_VALUE_MAP.get(p.id)
+    if mapping and disp in mapping:
+        return mapping[disp]
+    return disp
+
+
 def find_route(ds: RINFDataset, line_id: str, op_start_id: str, op_end_id: str) -> list[SectionOfLine]:
     """BFS po SOL-ach na wskazanej linii pomiedzy dwoma OP.
 
@@ -135,11 +157,13 @@ def collect_values_per_track(ds: RINFDataset, chain: list[SectionOfLine]) -> dic
             tid = t.identification
             if tid in per_track:
                 for p in t.parameters:
-                    per_track[tid][p.id].add(p.display)
+                    v = _form_value(p)
+                    if v is not None:
+                        per_track[tid][p.id].add(v)
             # SOL tunele - wspolne
             for tu in t.tunnels:
                 for p in tu.parameters:
-                    shared[p.id].add(p.display)
+                    shared[p.id].add(_form_value(p))
 
     for oid in op_ids_in_route:
         op = ds.op_by_id.get(oid)
@@ -150,10 +174,10 @@ def collect_values_per_track(ds: RINFDataset, chain: list[SectionOfLine]) -> dic
         for t in op.tracks:
             for pl in t.platforms:
                 for p in pl.parameters:
-                    shared[p.id].add(p.display)
+                    shared[p.id].add(_form_value(p))
             for tu in t.tunnels:
                 for p in tu.parameters:
-                    shared[p.id].add(p.display)
+                    shared[p.id].add(_form_value(p))
 
     # Polacz shared do obu torow
     for tid in ("N", "P"):
